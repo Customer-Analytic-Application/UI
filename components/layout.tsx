@@ -2,23 +2,36 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { Grid } from "@mui/material";
-import Charts from "./charts";
+import Link from "next/link";
+
+import { PagesOutlined } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 
 const drawerWidth = 240;
 
-export default function PermanentDrawerLeft() {
+const navItems = [
+  {
+    label: "Home",
+    to: "/",
+  },
+  {
+    label: "Customer Satisfaction",
+    to: "/customer-satisfaction",
+  },
+  {
+    label: "Customer analytics",
+    to: "/customer-analytics",
+  },
+];
+
+export default function Layout(props: any) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -37,26 +50,13 @@ export default function PermanentDrawerLeft() {
         <Toolbar />
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+          {navItems.map((obj, index) => (
+            <ListItem key={obj.label} disablePadding>
+              <ListItemButton LinkComponent={Link} href={obj.to}>
+                <ListItemIcon>{<PagesOutlined />}</ListItemIcon>
+                <Typography style={{ textAlign: "left" }}>
+                  {obj.label}
+                </Typography>
               </ListItemButton>
             </ListItem>
           ))}
@@ -67,18 +67,18 @@ export default function PermanentDrawerLeft() {
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
         style={{ minHeight: "100vh" }}
       >
-        <h1
-          style={{
-            color: "white",
-            display: "block",
-            margin: "10px",
-            marginLeft: "auto",
-          }}
-        >
-          Customer analytics dashboard
-        </h1>
-
-        <Charts />
+        <div>
+          <h1
+            style={{
+              color: "white",
+              textAlign: "end",
+              marginBottom: "15px",
+            }}
+          >
+            {props.pageName}
+          </h1>
+        </div>
+        {props.children}
       </Box>
     </Box>
   );
