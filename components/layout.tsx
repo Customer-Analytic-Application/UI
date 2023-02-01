@@ -8,7 +8,6 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import Link from "next/link";
 
 import { PagesOutlined } from "@mui/icons-material";
@@ -20,6 +19,10 @@ const navItems = [
   {
     label: "Home",
     to: "/",
+  },
+  {
+    label: "Customer churn xai",
+    to: "/churn-xai",
   },
   {
     label: "Customer Satisfaction",
@@ -65,7 +68,7 @@ export default function Layout(props: any) {
       <Box
         component="main"
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-        style={{ minHeight: "100vh" }}
+        style={{ minHeight: "100vh", overflowX: "scroll" }}
       >
         <div>
           <h1

@@ -1,13 +1,17 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import axios from "axios";
+import NextCors from "nextjs-cors";
 
-type Data = {
-  name: string
-}
+export default async function handler(req: any, res: any) {
+  console.log("req came", req);
+  // Run the cors middleware
+  // nextjs-cors uses the cors package, so we invite you to check the documentation https://github.com/expressjs/cors
+  await NextCors(req, res, {
+    // Options
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    origin: "*",
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  });
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: 'John Doe' })
+  const result = await axios.get("http://localhost:3000/avg-csat-score");
+  res.json(result.data);
 }
