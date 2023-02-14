@@ -1,4 +1,4 @@
-import { find, groupBy, uniq } from "lodash";
+import { find, groupBy, sortBy, uniq } from "lodash";
 
 export function getFeaturesFromResponse(res: any) {
   return res.data.frames[0].columns.map((col: any) => col.label);
@@ -39,6 +39,7 @@ export function getVIfromResponse(res: any) {
       value: data[2][i],
     });
   }
+
   return {
     data: resdata,
   };
@@ -51,10 +52,11 @@ export function getShapFromResponse(res: any) {
       arr.push({
         name: col.label,
         value: point,
+        mean: col.sigma,
       });
     });
   });
-  return arr;
+  return sortBy(arr, (obj) => 5 - obj.mean);
 }
 
 export function getTestDataFromReponse(res: any) {
@@ -82,11 +84,7 @@ export function getIceDataFromResponse(res: any) {
   const simulated_x_valueCol = find(res.data.frames[0].columns, {
     label: "simulated_x_value",
   });
-  const u_rowids = uniq(row_idCol.data);
-  const u_simulated_x_value = uniq(simulated_x_valueCol.data);
   const finalData: any = [];
-  console.log(u_rowids);
-  let i = 0;
   const obj: any = {};
   simulated_x_valueCol.data.forEach((xval: any, ind: any) => {
     if (!obj[xval]) obj[xval] = [];
@@ -95,13 +93,15 @@ export function getIceDataFromResponse(res: any) {
       mean_response: mean_responseCol.data[ind],
     });
   });
-  console.log(obj);
   Object.keys(obj).map((key: any) => {
-    let tmp: any = { xval: key };
+    let tmp: any = { xval: +key };
     obj[key].map((val: any) => {
       tmp[val.row_id] = val.mean_response;
     });
     finalData.push(tmp);
   });
-  return finalData;
+  return {
+    values: finalData,
+    domain: simulated_x_valueCol.domain,
+  };
 }

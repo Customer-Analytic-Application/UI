@@ -27,9 +27,24 @@ export default async function handler(req: any, res: any) {
     res.json(getFeaturesFromResponse(result));
   }
   if (req.query.pdp) {
-    const result = await axios.get(
+    let result;
+
+    result = await axios.get(
       "http://localhost:54321/3/PartialDependence/pdp-leader_model_id-churn_test_data"
     );
+
+    if (!result.data.partial_dependence_data) {
+      console.log("calling post pdp\n\n\n\n");
+      await axios.post("http://localhost:54321/3/PartialDependence/", {
+        destination_key: "pdp-leader_model_id-churn_test_data",
+        frame_id: "churn_test_data",
+        model_id: "leader_model_id",
+      });
+      result = await axios.get(
+        "http://localhost:54321/3/PartialDependence/pdp-leader_model_id-churn_test_data"
+      );
+    }
+
     res.json(getPDPfromResponse(result));
   }
   if (req.query.variable_importances) {
@@ -39,9 +54,25 @@ export default async function handler(req: any, res: any) {
     res.json(getVIfromResponse(result));
   }
   if (req.query.shap) {
-    const result = await axios.get(
-      "http://localhost:54321/3/Frames/predict_contributions-churn_test"
-    );
+    let result;
+    try {
+      result = await axios.get(
+        "http://localhost:54321/3/Frames/predict_contributions-churn_test"
+      );
+    } catch (error) {
+      console.log("got error in shap\n\n\n\n\n\n");
+      await axios.post(
+        "http://localhost:54321/3/Predictions/models/leader_model_id/frames/churn_test_data",
+        {
+          predict_contributions: true,
+          compare_abs: true,
+          predictions_frame: "predict_contributions-churn_test",
+        }
+      );
+      result = await axios.get(
+        "http://localhost:54321/3/Frames/predict_contributions-churn_test"
+      );
+    }
     res.json(getShapFromResponse(result));
   }
   if (req.query.test_data) {
@@ -52,7 +83,7 @@ export default async function handler(req: any, res: any) {
   }
   if (req.query.ice_plot) {
     const result = await axios.get(
-      "http://localhost:54321/3/Frames/totalcharges-iceplot?row_count=1200"
+      `http://localhost:54321/3/Frames/${req.query.ice_plot}-iceplot?row_count=1200`
     );
     res.json(getIceDataFromResponse(result));
   }

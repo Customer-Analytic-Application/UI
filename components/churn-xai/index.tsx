@@ -29,7 +29,7 @@ function Pdp() {
 
   useEffect(() => {
     axios.get("/api/xai?features=true").then((res) => {
-      setFeatures(res.data);
+      setFeatures(res.data.map((s: string) => s.toLowerCase()));
     });
 
     axios.get("/api/xai?pdp=true").then((res) => {
@@ -50,7 +50,7 @@ function Pdp() {
   if (!selectedPdp) return <p>Loading</p>;
 
   return (
-    <Grid container style={{ maxWidth: "600px" }}>
+    <Grid container>
       <Grid item xs={6}>
         <Typography variant="h5">Partial dependancy plot</Typography>
       </Grid>
@@ -91,7 +91,10 @@ function Pdp() {
             style={{ backgroundColor: "white" }}
           >
             <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey={selectedPdp.name} />
+            <XAxis
+              dataKey={selectedPdp.name}
+              interval={selectedPdp.type == "string" ? 0 : undefined}
+            />
             <YAxis />
             <Tooltip />
 

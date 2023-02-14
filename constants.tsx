@@ -50,3 +50,18 @@ export const linechart_data = [
     amt: 2100,
   },
 ];
+
+export const color_codes = [
+  "#00ffff",
+  "#cc33ff",
+  "#ffff00",
+  "#009933",
+  "#003366",
+  "#ff00ff",
+  "#ff0066",
+  "#6600cc",
+  "#993300",
+  "#666633",
+  "#ff9900",
+  "#0000ff",
+];

@@ -28,7 +28,6 @@ function FeatureImportance() {
 
   useEffect(() => {
     axios.get("/api/xai?variable_importances=true").then((res) => {
-      console.log("variable_importances response", res.data);
       setFeatures(res.data);
     });
   }, []);
@@ -38,7 +37,9 @@ function FeatureImportance() {
   return (
     <Grid container style={{ maxWidth: "600px" }}>
       <Grid item xs={6}>
-        <Typography variant="h5">Variable Importance</Typography>
+        <Typography variant="h5" align="center">
+          Variable Importance
+        </Typography>
       </Grid>
 
       <Grid item xs={12} style={{ marginTop: "45px" }}>
@@ -58,7 +59,7 @@ function FeatureImportance() {
           >
             <CartesianGrid stroke="#f5f5f5" />
             <XAxis type="number" />
-            <YAxis dataKey={"name"} type="category" />
+            <YAxis dataKey={"name"} type="category" interval={0} />
             <Tooltip />
 
             <Bar dataKey="value" fill="#413ea0" />

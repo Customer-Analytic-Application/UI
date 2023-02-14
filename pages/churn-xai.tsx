@@ -9,21 +9,17 @@ import { Grid } from "@mui/material";
 export default function CustomerAnalytics() {
   return (
     <Layout pageName={"Customer Churn with xai"}>
-      <Grid container>
-        <Grid item xs={6}>
+      <Grid
+        container
+        justifyContent={"center"}
+        alignItems={"center"}
+        style={{ marginTop: "80px" }}
+      >
+        <Grid item xs={6} style={{ padding: "15px" }}>
           <Pdp />
         </Grid>
-        <Grid item xs={6}>
-          <FeatureImportance />
-        </Grid>
-        <Grid item xs={6}>
-          <Shap />
-        </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} style={{ padding: "15px" }}>
           <IcePlot />
-        </Grid>
-        <Grid item xs={12}>
-          <ChurnTable />
         </Grid>
       </Grid>
     </Layout>

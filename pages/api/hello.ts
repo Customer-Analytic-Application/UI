@@ -12,6 +12,6 @@ export default async function handler(req: any, res: any) {
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   });
 
-  const result = await axios.get("http://localhost:3000/avg-csat-score");
+  const result = await axios.get("http://localhost:3080/avg-csat-score");
   res.json(result.data);
 }

@@ -2,9 +2,9 @@ import { linechart_data } from "@/constants";
 import { getAvgCSATScore } from "@/services";
 import { Grid, Typography } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from "recharts";
-import GaugeChart from "react-gauge-chart";
+const GaugeChart = lazy(() => import("react-gauge-chart"));
 
 export function AvgCSATscore() {
   const [value, setValue] = useState<number>(0);
@@ -13,8 +13,8 @@ export function AvgCSATscore() {
       setValue(+res.data.avg);
     });
   }, []);
-  console.log("value ", value);
-  if (!value) return "Loading";
+  console.log("value ", GaugeChart);
+  if (!value || !GaugeChart) return <>Loading</>;
   return (
     <Grid
       container
