@@ -2,7 +2,7 @@ import axios from "axios";
 import NextCors from "nextjs-cors";
 
 export default async function handler(req: any, res: any) {
-  console.log("req came", req);
+  console.log("server req came", req.query);
   // Run the cors middleware
   // nextjs-cors uses the cors package, so we invite you to check the documentation https://github.com/expressjs/cors
   await NextCors(req, res, {
@@ -12,6 +12,7 @@ export default async function handler(req: any, res: any) {
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   });
 
-  const result = await axios.get("http://localhost:3080/avg-csat-score");
+  const result = await axios.get(`http://localhost:3080/${req.query.path}`);
   res.json(result.data);
+  return;
 }

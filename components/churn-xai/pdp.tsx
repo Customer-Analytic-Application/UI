@@ -21,39 +21,36 @@ import {
   YAxis,
 } from "recharts";
 import _ from "lodash";
+import { GRAPH_BG } from "@/constants";
 
-function Pdp() {
-  const [features, setFeatures] = useState([]);
+function Pdp({ feature }: any) {
   const [pdpData, setPdpData] = useState<any>([]);
   const [selectedPdp, setSelectedPdp] = useState<any>(null);
 
   useEffect(() => {
-    axios.get("/api/xai?features=true").then((res) => {
-      setFeatures(res.data.map((s: string) => s.toLowerCase()));
-    });
-
     axios.get("/api/xai?pdp=true").then((res) => {
       console.log("pdp response", res.data);
       setPdpData(res.data);
-      setSelectedPdp(res.data[0]);
+      setSelectedPdp(
+        res.data.filter((arr: any) => arr.name == "totalcharges")[0]
+      );
     });
   }, []);
-
-  const onChange = (e: any) => {
-    console.log(e.target.value);
+  useEffect(() => {
     pdpData.forEach((pdp: any) => {
-      if (pdp.name == e.target.value.toLowerCase()) {
+      if (pdp.name == feature.toLowerCase()) {
         setSelectedPdp(pdp);
       }
     });
-  };
+  }, [feature]);
   if (!selectedPdp) return <p>Loading</p>;
 
   return (
     <Grid container>
-      <Grid item xs={6}>
-        <Typography variant="h5">Partial dependancy plot</Typography>
+      <Grid item xs={12} margin={2}>
+        <Typography variant="h5">Partial Dependancy Plot</Typography>
       </Grid>
+      {/*
       <Grid item xs={6}>
         <FormControl sx={{ m: 1, minWidth: 200 }}>
           <InputLabel id="demo-simple-select-helper-label">
@@ -64,6 +61,7 @@ function Pdp() {
             id="demo-simple-select-helper"
             label="Select Feature"
             fullWidth
+            value={selectedPdp.name}
             onChange={onChange}
           >
             {features
@@ -76,6 +74,7 @@ function Pdp() {
           </Select>
         </FormControl>
       </Grid>
+              */}
       <Grid item xs={12}>
         <div style={{ padding: "5px" }}>
           <ComposedChart
@@ -88,9 +87,10 @@ function Pdp() {
               bottom: 20,
               left: 20,
             }}
-            style={{ backgroundColor: "white" }}
+            style={{ backgroundColor: GRAPH_BG, borderRadius: "15px" }}
+            barGap={10}
           >
-            <CartesianGrid stroke="#f5f5f5" />
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey={selectedPdp.name}
               interval={selectedPdp.type == "string" ? 0 : undefined}
@@ -99,7 +99,7 @@ function Pdp() {
             <Tooltip />
 
             {selectedPdp.type == "string" ? (
-              <Bar dataKey="mean_response" barSize={20} fill="#413ea0" />
+              <Bar dataKey="mean_response" barSize={40} fill="#243763" />
             ) : (
               <Line type="monotone" dataKey="mean_response" stroke="#ff7300" />
             )}

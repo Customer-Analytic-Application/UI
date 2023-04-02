@@ -7,20 +7,15 @@ import "antd-css-utilities/utility.min.css";
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
-    text: {
-      primary: "#nnn",
+    background: {
+      default: "#17223B",
+      paper: "#071E3D",
     },
   },
   typography: {
-    allVariants: {
-      color: "#FFF",
-      textAlign: "center",
-    },
-    h1: {
-      color: "#nnn",
-    },
-    h3: {
-      fontSize: "1.5rem",
+    h5: {
+      fontWeight: 600,
+      fontSize: "1.65rem",
     },
   },
 });

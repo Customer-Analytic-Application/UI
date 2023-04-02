@@ -24,13 +24,11 @@ import {
   ZAxis,
 } from "recharts";
 import _, { find, sortBy } from "lodash";
-import { features } from "process";
-import { color_codes } from "@/constants";
+import { color_codes, GRAPH_BG } from "@/constants";
 
-function IcePlot() {
+function IcePlot({ feature }: any) {
   const [features, setFeatures] = useState([]);
   const [shapData, setShapData] = useState<any>(null);
-  const [selectedFeature, setSelectedFeature] = useState<any>("totalcharges");
 
   useEffect(() => {
     axios.get("/api/xai?features=true").then((res) => {
@@ -46,6 +44,13 @@ function IcePlot() {
     });
   }, []);
 
+  useEffect(() => {
+    axios.get(`/api/xai?ice_plot=${feature.toLowerCase()}`).then((res) => {
+      setShapData(res.data);
+      console.log("ice", res.data);
+    });
+  }, [feature]);
+
   if (!shapData || features.length === 0) return <p>Loading</p>;
   let tmp = shapData.values.filter(
     (obj: any) => typeof obj.xval !== "string" && Object.keys(obj).length === 12
@@ -58,19 +63,12 @@ function IcePlot() {
 
   tmp = tmp.filter((obj: any) => obj.xval != ".missing(NA)");
 
-  const onChange = (e: any) => {
-    setSelectedFeature(e.target.value);
-    axios.get(`/api/xai?ice_plot=${e.target.value}`).then((res) => {
-      setShapData(res.data);
-      console.log("ice", res.data);
-    });
-  };
-
   return (
     <Grid container style={{ maxWidth: "600px" }}>
-      <Grid item xs={6}>
-        <Typography variant="h5">{`ICE Plot for ${selectedFeature}`}</Typography>
+      <Grid item xs={12} margin={2}>
+        <Typography variant="h5">{`ICE Plot`}</Typography>
       </Grid>
+      {/*
       <Grid item xs={6}>
         <FormControl sx={{ m: 1, minWidth: 200 }}>
           <InputLabel id="demo-simple-select-helper-label">
@@ -90,6 +88,7 @@ function IcePlot() {
           </Select>
         </FormControl>
       </Grid>
+            */}
       <Grid item xs={12}>
         <div style={{ padding: "5px" }}>
           <ComposedChart
@@ -102,7 +101,7 @@ function IcePlot() {
               bottom: 20,
               left: 20,
             }}
-            style={{ backgroundColor: "white" }}
+            style={{ backgroundColor: GRAPH_BG, borderRadius: "15px" }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis

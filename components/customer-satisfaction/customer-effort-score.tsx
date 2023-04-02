@@ -1,8 +1,39 @@
-import { linechart_data } from "@/constants";
+import {
+  COLORS,
+  linechart_data,
+  piechart_data,
+  renderCustomizedLabel,
+} from "@/constants";
 import { Grid, Typography } from "@mui/material";
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from "recharts";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import {
+  CartesianGrid,
+  Cell,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  Tooltip,
+  XAxis,
+} from "recharts";
 
 export function CIScore() {
+  const [value, setValue] = useState<any[]>([]);
+  useEffect(() => {
+    axios.get("/api/server?path=cltv").then((res) => {
+      console.log("cltv response", res.data);
+      setValue(res.data);
+    });
+  }, []);
+  console.log("cltv values are", value, piechart_data);
+  const styles = {
+    backgroundColor: "white",
+    borderRadius: "20px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    border: "2pc solid blue",
+  };
   return (
     <Grid
       container
@@ -11,23 +42,33 @@ export function CIScore() {
       alignItems={"center"}
       style={{ width: "400px", height: "300px" }}
     >
-      <Typography variant="h3">Customer Effort score</Typography>
-      <LineChart
-        width={350}
-        height={280}
+      <Typography variant="h5">Customer Life Time Value</Typography>
+      <PieChart
+        width={300}
+        height={250}
         style={{
           backgroundColor: "white",
-          borderRadius: "20px",
-          margin: "10px",
+          margin: "20px",
+          borderRadius: "15px",
         }}
-        data={linechart_data}
       >
-        <XAxis dataKey="name" />
+        <Pie
+          dataKey="value"
+          isAnimationActive={false}
+          data={value}
+          cx="50%"
+          cy="50%"
+          outerRadius={80}
+          fill="#8884d8"
+          labelLine={false}
+          label={renderCustomizedLabel}
+        >
+          {value.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
         <Tooltip />
-        <CartesianGrid stroke="#f5f5f5" />
-        <Line type="monotone" dataKey="uv" stroke="#ff7300" yAxisId={0} />
-        <Line type="monotone" dataKey="pv" stroke="#387908" yAxisId={1} />
-      </LineChart>
+      </PieChart>
     </Grid>
   );
 }

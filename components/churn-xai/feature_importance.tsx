@@ -22,6 +22,7 @@ import {
   YAxis,
 } from "recharts";
 import _ from "lodash";
+import { GRAPH_BG } from "@/constants";
 
 function FeatureImportance() {
   const [features, setFeatures] = useState<any>(null);
@@ -42,27 +43,27 @@ function FeatureImportance() {
         </Typography>
       </Grid>
 
-      <Grid item xs={12} style={{ marginTop: "45px" }}>
+      <Grid item xs={12} style={{ marginTop: "15px" }}>
         <div style={{ padding: "5px" }}>
           <BarChart
-            width={500}
-            height={400}
+            width={750}
+            height={600}
             data={features.data}
             margin={{
               top: 20,
               right: 20,
               bottom: 20,
-              left: 80,
+              left: 140,
             }}
-            style={{ backgroundColor: "white" }}
+            style={{ backgroundColor: GRAPH_BG, borderRadius: "15px" }}
             layout={"vertical"}
           >
-            <CartesianGrid stroke="#f5f5f5" />
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis type="number" />
             <YAxis dataKey={"name"} type="category" interval={0} />
             <Tooltip />
 
-            <Bar dataKey="value" fill="#413ea0" />
+            <Bar dataKey="value" fill="#243763" />
           </BarChart>
         </div>
       </Grid>

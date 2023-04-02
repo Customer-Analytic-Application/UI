@@ -9,11 +9,11 @@ const GaugeChart = lazy(() => import("react-gauge-chart"));
 export function AvgCSATscore() {
   const [value, setValue] = useState<number>(0);
   useEffect(() => {
-    axios.get("/api/hello").then((res) => {
-      setValue(+res.data.avg);
+    axios.get("/api/server?path=avg-csat-score").then((res) => {
+      setValue(+res.data);
     });
   }, []);
-  console.log("value ", GaugeChart);
+  console.log("value ", value);
   if (!value || !GaugeChart) return <>Loading</>;
   return (
     <Grid
@@ -23,7 +23,7 @@ export function AvgCSATscore() {
       alignItems={"center"}
       style={{ width: "400px", height: "300px" }}
     >
-      <Typography variant="h3">Average CSAT Score</Typography>
+      <Typography variant="h5">Average CSAT Score</Typography>
 
       <GaugeChart
         id="gauge-chart2"

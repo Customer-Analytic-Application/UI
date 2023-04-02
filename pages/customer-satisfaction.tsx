@@ -20,7 +20,7 @@ import CustomerSatifaction from "@/components/customer-satisfaction";
 
 export default function CustomerAnalytics() {
   return (
-    <Layout pageName={"Customer Satisfcation board"}>
+    <Layout pageName={"Customer Satisfaction board"}>
       <CustomerSatifaction />
     </Layout>
   );

@@ -1,28 +1,44 @@
 import { Chip, Grid, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function MetricRow() {
+  const [values, setValues] = useState<any>({});
   const metrics = [
     {
-      name: "Subscriber count",
-      value: "10286",
+      name: "Subscriber Count",
+      api: "subs-count",
     },
     {
-      name: "revenue",
-      value: "10.6Cr",
+      name: "Avg Yearly Charges",
+      api: "avg-total-charges",
     },
     {
-      name: "Expense",
-      value: "4.7CR",
+      name: "Avg Monthly Charges",
+      api: "avg-monthly-charges",
     },
     {
-      name: "Churn rate",
-      value: "12.53%",
+      name: "Churn Rate",
+      api: "churn-rate",
     },
   ];
   const chipStyle = {
     backgroundImage: `linear-gradient(to right, #7f42bd , #ed1c7a)`,
   };
+
+  useEffect(() => {
+    (async () => {
+      let obj: any = {};
+      for (var metric of metrics) {
+        const res = await axios.get(`api/server?path=${metric.api}`);
+        console.log("data for metric: ", metric.name, res);
+        obj[metric.name] = res.data;
+      }
+      setValues(obj);
+    })();
+  }, []);
+  console.log("metric-row values are", values);
 
   return (
     <Stack
@@ -38,7 +54,7 @@ export default function MetricRow() {
           <Chip
             label={
               <Typography style={{ width: "150px", textAlign: "center" }}>
-                {metric.value}
+                {values[metric.name]}
               </Typography>
             }
             style={chipStyle}
