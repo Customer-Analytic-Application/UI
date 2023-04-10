@@ -54,7 +54,7 @@ export default function MetricRow() {
           <Chip
             label={
               <Typography style={{ width: "150px", textAlign: "center" }}>
-                {values[metric.name]}
+                {values[metric.name]?.toFixed(2)}
               </Typography>
             }
             style={chipStyle}

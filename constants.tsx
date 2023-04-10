@@ -66,7 +66,7 @@ export const color_codes = [
   "#0000ff",
 ];
 
-export const GRAPH_BG = "#F3EBFA";
+export const GRAPH_BG = "#17223B";
 
 export const COLORS = [
   "#FF6384",
@@ -90,7 +90,6 @@ export const COLORS = [
   "#FF4500",
   "#8A2BE2",
 ];
-
 export const RADIAN = Math.PI / 180;
 export const renderCustomizedLabel = (obj: any) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, name } =
@@ -103,7 +102,7 @@ export const renderCustomizedLabel = (obj: any) => {
     <text
       x={x}
       y={y}
-      fill="black"
+      fill="white"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
       style={{ fontSize: "0.75rem" }}

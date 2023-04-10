@@ -1,5 +1,6 @@
 import {
   COLORS,
+  GRAPH_BG,
   linechart_data,
   piechart_data,
   renderCustomizedLabel,
@@ -47,7 +48,7 @@ export function CIScore() {
         width={300}
         height={250}
         style={{
-          backgroundColor: "white",
+          backgroundColor: GRAPH_BG,
           margin: "20px",
           borderRadius: "15px",
         }}

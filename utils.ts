@@ -45,8 +45,34 @@ export function getVIfromResponse(res: any) {
   };
 }
 
-export function getShapFromResponse(res: any) {
+export function getShapFromResponse(res: any, testdata: any) {
   const arr: any = [];
+  const resbyname: any = {};
+  const testbyname: any = {};
+  res.data.frames[0].columns.forEach((col: any) => {
+    resbyname[col.label] = col;
+  });
+  testdata.data.frames[0].columns.forEach((col: any) => {
+    testbyname[col.label] = col;
+  });
+  console.log(Object.keys(testbyname), Object.keys(resbyname));
+  Object.keys(resbyname).forEach((key: any) => {
+    console.log(key, testbyname[key], resbyname[key]);
+    if (!testbyname[key]) return;
+    resbyname[key].data.map((point: any, ind: any) => {
+      arr.push({
+        name: key,
+        value: point,
+        sigma: resbyname[key].sigma,
+        xval: (
+          (testbyname[key]["data"][ind] - testbyname[key].mins[0]) /
+          testbyname[key].maxs[0]
+        ).toFixed(1),
+      });
+    });
+  });
+  return sortBy(arr, (obj) => 5 - obj.sigma);
+  /*
   res.data.frames[0].columns.forEach((col: any) => {
     col.data.forEach((point: any) => {
       arr.push({
@@ -56,7 +82,8 @@ export function getShapFromResponse(res: any) {
       });
     });
   });
-  return sortBy(arr, (obj) => 5 - obj.mean);
+  
+ */
 }
 
 export function getTestDataFromReponse(res: any) {
@@ -72,6 +99,18 @@ export function getTestDataFromReponse(res: any) {
   });
   return {
     columns: cols,
+    rows,
+  };
+}
+
+export function getInfogramData(res: any) {
+  const rows: any = [];
+  res.data.frames[0].columns.forEach((col: any, ind: any) => {
+    if (col.data == null)
+      rows.push({ data: col.string_data, label: col.label });
+    else rows.push({ data: col.data, label: col.label });
+  });
+  return {
     rows,
   };
 }
@@ -96,7 +135,7 @@ export function getIceDataFromResponse(res: any) {
   Object.keys(obj).map((key: any) => {
     let tmp: any = { xval: +key };
     obj[key].map((val: any) => {
-      tmp[val.row_id] = val.mean_response;
+      tmp[val.row_id] = val.mean_response.toFixed(2);
     });
     finalData.push(tmp);
   });

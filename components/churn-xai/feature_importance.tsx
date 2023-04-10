@@ -24,7 +24,11 @@ import {
 import _ from "lodash";
 import { GRAPH_BG } from "@/constants";
 
-function FeatureImportance() {
+function FeatureImportance({
+  width = 500,
+  height = 500,
+  axisfont = "0.65rem",
+}) {
   const [features, setFeatures] = useState<any>(null);
 
   useEffect(() => {
@@ -36,34 +40,54 @@ function FeatureImportance() {
   if (!features) return <p>Loading</p>;
 
   return (
-    <Grid container style={{ maxWidth: "600px" }}>
-      <Grid item xs={6}>
+    <Grid container>
+      <Grid item xs={12} margin={2}>
         <Typography variant="h5" align="center">
           Variable Importance
         </Typography>
       </Grid>
 
-      <Grid item xs={12} style={{ marginTop: "15px" }}>
+      <Grid
+        item
+        xs={12}
+        style={{ marginTop: "15px" }}
+        container
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
         <div style={{ padding: "5px" }}>
           <BarChart
-            width={750}
-            height={600}
-            data={features.data}
+            width={width}
+            height={height}
+            data={features.data.map((a: any) => ({
+              ...a,
+              name: a.name.charAt(0).toUpperCase() + a.name.slice(1),
+            }))}
             margin={{
               top: 20,
               right: 20,
               bottom: 20,
-              left: 140,
+              left: 20,
             }}
             style={{ backgroundColor: GRAPH_BG, borderRadius: "15px" }}
             layout={"vertical"}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" />
-            <YAxis dataKey={"name"} type="category" interval={0} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#A9A9A9" />
+            <XAxis
+              type="number"
+              tick={{ fill: "white" }}
+              tickLine={{ stroke: "white" }}
+            />
+            <YAxis
+              dataKey={"name"}
+              type="category"
+              interval={0}
+              tick={{ fill: "white", fontSize: axisfont }}
+              tickLine={{ stroke: "white" }}
+            />
             <Tooltip />
 
-            <Bar dataKey="value" fill="#243763" />
+            <Bar dataKey="value" fill="#0096FF" />
           </BarChart>
         </div>
       </Grid>

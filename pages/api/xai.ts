@@ -1,6 +1,7 @@
 import {
   getFeaturesFromResponse,
   getIceDataFromResponse,
+  getInfogramData,
   getPDPfromResponse,
   getShapFromResponse,
   getTestDataFromReponse,
@@ -73,7 +74,10 @@ export default async function handler(req: any, res: any) {
         "http://localhost:54321/3/Frames/predict_contributions-churn_test"
       );
     }
-    res.json(getShapFromResponse(result));
+    const testdata = await axios.get(
+      "http://localhost:54321/3/Frames/churn_test_data"
+    );
+    res.json(getShapFromResponse(result, testdata));
   }
   if (req.query.test_data) {
     const result = await axios.get(
@@ -86,5 +90,17 @@ export default async function handler(req: any, res: any) {
       `http://localhost:54321/3/Frames/${req.query.ice_plot}-iceplot?row_count=1200`
     );
     res.json(getIceDataFromResponse(result));
+  }
+  if (req.query.infogram_with_pf) {
+    const result = await axios.get(
+      "http://localhost:54321/3/Frames/infogram_with_pf"
+    );
+    res.json(getInfogramData(result));
+  }
+  if (req.query.infogram_without_pf) {
+    const result = await axios.get(
+      "http://localhost:54321/3/Frames/infogram_without_pf"
+    );
+    res.json(getInfogramData(result));
   }
 }

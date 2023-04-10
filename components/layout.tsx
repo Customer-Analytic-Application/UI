@@ -45,6 +45,11 @@ const navItems = [
     to: "/customer-satisfaction",
     options: [],
   },
+  {
+    label: "Fairness",
+    to: "/fairness",
+    options: [],
+  },
 ];
 
 export default function Layout(props: any) {
@@ -61,11 +66,11 @@ export default function Layout(props: any) {
         <Toolbar>
           <h1
             style={{
-              color: "#C0C0C0",
+              color: "white",
               textAlign: "end",
             }}
           >
-            {props.pageName}
+            Customer Analytics with Explainable AI
           </h1>
         </Toolbar>
       </AppBar>

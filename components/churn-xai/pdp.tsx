@@ -13,9 +13,11 @@ import {
   Bar,
   CartesianGrid,
   ComposedChart,
+  Label,
   Legend,
   Line,
   LineChart,
+  Text,
   Tooltip,
   XAxis,
   YAxis,
@@ -23,7 +25,12 @@ import {
 import _ from "lodash";
 import { GRAPH_BG } from "@/constants";
 
-function Pdp({ feature }: any) {
+function Pdp({
+  feature,
+  width = 500,
+  height = 500,
+  axisfont = "0.65rem",
+}: any) {
   const [pdpData, setPdpData] = useState<any>([]);
   const [selectedPdp, setSelectedPdp] = useState<any>(null);
 
@@ -37,6 +44,10 @@ function Pdp({ feature }: any) {
     });
   }, []);
   useEffect(() => {
+    console.log(
+      "pdpfeatures",
+      pdpData.map((p: any) => p.name)
+    );
     pdpData.forEach((pdp: any) => {
       if (pdp.name == feature.toLowerCase()) {
         setSelectedPdp(pdp);
@@ -48,7 +59,9 @@ function Pdp({ feature }: any) {
   return (
     <Grid container>
       <Grid item xs={12} margin={2}>
-        <Typography variant="h5">Partial Dependancy Plot</Typography>
+        <Typography variant="h5" align="center">
+          Partial Dependancy Plot
+        </Typography>
       </Grid>
       {/*
       <Grid item xs={6}>
@@ -76,10 +89,10 @@ function Pdp({ feature }: any) {
       </Grid>
               */}
       <Grid item xs={12}>
-        <div style={{ padding: "5px" }}>
+        <div style={{ padding: "5px", color: "white !important" }}>
           <ComposedChart
-            width={500}
-            height={400}
+            width={width}
+            height={height}
             data={selectedPdp.data}
             margin={{
               top: 20,
@@ -87,21 +100,38 @@ function Pdp({ feature }: any) {
               bottom: 20,
               left: 20,
             }}
-            style={{ backgroundColor: GRAPH_BG, borderRadius: "15px" }}
+            style={{
+              backgroundColor: GRAPH_BG,
+              borderRadius: "15px",
+              color: "white",
+              fill: "white",
+            }}
             barGap={10}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              style={{ color: "red" }}
+              color="white"
+            />
             <XAxis
               dataKey={selectedPdp.name}
               interval={selectedPdp.type == "string" ? 0 : undefined}
+              tick={{ fill: "white" }}
+              tickLine={{ stroke: "white" }}
             />
-            <YAxis />
-            <Tooltip />
+            <YAxis tick={{ fill: "white" }} tickLine={{ stroke: "white" }} />
 
+            <Tooltip />
+            <Text fill="white" />
             {selectedPdp.type == "string" ? (
-              <Bar dataKey="mean_response" barSize={40} fill="#243763" />
+              <Bar dataKey="mean_response" barSize={40} fill="#0096FF" />
             ) : (
-              <Line type="monotone" dataKey="mean_response" stroke="#ff7300" />
+              <Line
+                type="monotone"
+                dataKey="mean_response"
+                stroke="#ff7300"
+                color="white"
+              />
             )}
           </ComposedChart>
         </div>

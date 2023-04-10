@@ -35,7 +35,7 @@ class CustomizedAxisTick extends React.PureComponent {
           y={0}
           dy={16}
           textAnchor="end"
-          fill="#666"
+          fill="white"
           transform="rotate(-90)"
           style={{ fontSize: "0.8rem" }}
         >
@@ -49,11 +49,11 @@ export function Chart({ type, data }: { type: string; data: Array<any> }) {
   const width = 400;
   const height = 220;
   const styles = {
-    backgroundColor: "white",
     borderRadius: "20px",
     marginLeft: "auto",
     marginRight: "auto",
   };
+  data = sortBy(data, "xval");
   if (type == "line") {
     return (
       <div style={{ padding: "5px" }}>
@@ -69,8 +69,13 @@ export function Chart({ type, data }: { type: string; data: Array<any> }) {
             left: 0,
           }}
         >
-          <XAxis dataKey="xval" type="number" domain={[0, 72]} />
-          <YAxis dataKey="yval" domain={[0, 650]} />
+          <XAxis
+            dataKey="xval"
+            type="number"
+            domain={[0, 72]}
+            stroke="#0096FF"
+          />
+          <YAxis dataKey="yval" domain={[0, 650]} stroke="#0096FF" />
           <CartesianGrid stroke="#f5f5f5" />
           <Line dataKey="yval" stroke="#ff7300" dot={false} />
         </LineChart>
@@ -86,16 +91,18 @@ export function Chart({ type, data }: { type: string; data: Array<any> }) {
         style={styles}
         margin={{ bottom: 80, left: 0 }}
       >
-        <Bar dataKey="yval" fill="#8884d8" />
+        <Bar dataKey="yval" fill="#0096FF" />
         <XAxis
           dataKey="xval"
           type="category"
           interval={0}
           tick={<CustomizedAxisTick />}
+          stroke="#0096FF"
         ></XAxis>
         <YAxis
           dataKey={"yval"}
           style={{ fontSize: "0.8rem", marginLeft: "0", paddingLeft: "0" }}
+          stroke="white"
         />
         <Tooltip
           content={({ active, payload, label }: any) => {

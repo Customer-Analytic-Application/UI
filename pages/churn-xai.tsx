@@ -20,15 +20,22 @@ import { isEmpty } from "lodash";
 
 export default function CustomerAnalytics() {
   const router = useRouter();
-  const [features, setFeatures] = useState([]);
+  const [features, setFeatures] = useState([
+    "tenure",
+    "contract",
+    "onlinesecurity",
+    "techsupport",
+    "totalcharges",
+    "monthlycharges",
+    "internetservice",
+    "paymentmethod",
+    "onlinebackup",
+    "paperlessbilling",
+  ]);
   const [selectedFeature, setSelectedFeature] = useState("totalcharges");
-  useEffect(() => {
-    axios.get("/api/xai?features=true").then((res) => {
-      setFeatures(res.data.map((s: string) => s.toLowerCase()));
-    });
-  }, []);
-  const isemptyquery = Object.keys(router.query).length === 0;
 
+  const isemptyquery = Object.keys(router.query).length === 0;
+  const showfi = isemptyquery || router.query.fi;
   return (
     <Layout pageName={"Customer Churn with xai"}>
       <Grid container justifyContent={"center"} alignItems={"center"}>
@@ -66,13 +73,13 @@ export default function CustomerAnalytics() {
           </>
         )}
 
-        {(isemptyquery || router.query.fi) && (
-          <Grid item xs={12} style={{ padding: "15px" }} id={"efineifb"}>
+        {showfi && (
+          <Grid item xs={6} style={{ padding: "15px" }} id={"efineifb"}>
             <Feature_importance />
           </Grid>
         )}
         {(isemptyquery || router.query.shap) && (
-          <Grid item xs={12} style={{ padding: "15px" }} id={"#my-shap"}>
+          <Grid item xs={6} style={{ padding: "15px" }} id={"#my-shap"}>
             <Shap />
           </Grid>
         )}

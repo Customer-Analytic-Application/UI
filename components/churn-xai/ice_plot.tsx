@@ -24,9 +24,14 @@ import {
   ZAxis,
 } from "recharts";
 import _, { find, sortBy } from "lodash";
-import { color_codes, GRAPH_BG } from "@/constants";
+import { color_codes, COLORS, GRAPH_BG } from "@/constants";
 
-function IcePlot({ feature }: any) {
+function IcePlot({
+  feature,
+  width = 500,
+  height = 500,
+  axisfont = "0.65rem",
+}: any) {
   const [features, setFeatures] = useState([]);
   const [shapData, setShapData] = useState<any>(null);
 
@@ -66,7 +71,7 @@ function IcePlot({ feature }: any) {
   return (
     <Grid container style={{ maxWidth: "600px" }}>
       <Grid item xs={12} margin={2}>
-        <Typography variant="h5">{`ICE Plot`}</Typography>
+        <Typography variant="h5" align="center">{`ICE Plot`}</Typography>
       </Grid>
       {/*
       <Grid item xs={6}>
@@ -92,8 +97,8 @@ function IcePlot({ feature }: any) {
       <Grid item xs={12}>
         <div style={{ padding: "5px" }}>
           <ComposedChart
-            width={500}
-            height={400}
+            width={width}
+            height={height}
             data={tmp}
             margin={{
               top: 20,
@@ -108,8 +113,10 @@ function IcePlot({ feature }: any) {
               dataKey="xval"
               type={shapData.domain ? "category" : "number"}
               interval={0}
+              tick={{ fill: "white" }}
+              tickLine={{ stroke: "white" }}
             ></XAxis>
-            <YAxis />
+            <YAxis tick={{ fill: "white" }} tickLine={{ stroke: "white" }} />
             <Tooltip />
             {Object.keys(tmp[0])
               .filter((obj: any) => obj != "xval")
@@ -118,14 +125,14 @@ function IcePlot({ feature }: any) {
                   <Scatter
                     dataKey={key}
                     type="monotone"
-                    fill={color_codes[ind]}
+                    fill={COLORS[ind]}
                     name={`${(+key / 10.71).toFixed(0)}th percentile`}
                   />
                 ) : (
                   <Line
                     dataKey={key}
                     type="monotone"
-                    stroke={color_codes[ind]}
+                    stroke={COLORS[ind]}
                     dot={false}
                     name={`${(+key / 10.71).toFixed(0)}th percentile`}
                   />

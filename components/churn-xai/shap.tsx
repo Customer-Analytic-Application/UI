@@ -15,13 +15,31 @@ import {
 import _, { uniq } from "lodash";
 import { ResponsiveSwarmPlot } from "@nivo/swarmplot";
 import { GRAPH_BG } from "@/constants";
+const colors = [
+  "#0080ff",
+  "#0040ff",
+  "#0000ff",
+  "#4000ff",
+  "#8000ff",
+  "#bf00ff",
+  "#ff00ff",
+  "#ff00bf",
+  "#ff0080",
+  "#ff0040",
+  "#ff0000",
+];
 
-function Shap() {
+function Shap({ width = 500, height = 500, axisfont = "0.65rem" }) {
   const [shapData, setShapData] = useState<any>(null);
 
   useEffect(() => {
     axios.get("/api/xai?shap=true").then((res) => {
-      setShapData(res.data);
+      console.log("shap res", res.data);
+      setShapData(
+        res.data
+          .map((obj: any) => ({ ...obj, group: obj.name, id: "" + obj.xval }))
+          .filter((obj: any) => Math.abs(obj.value) <= 1)
+      );
     });
   }, []);
 
@@ -29,35 +47,40 @@ function Shap() {
   console.log(shapData);
 
   return (
-    <Grid container style={{ maxWidth: "600px" }}>
-      <Grid item xs={6}>
-        <Typography variant="h5">Shapely values</Typography>
+    <Grid container>
+      <Grid item xs={12} margin={2}>
+        <Typography variant="h5" align="center">
+          Shapely values
+        </Typography>
       </Grid>
 
-      <Grid item xs={12} style={{ marginTop: "45px" }}>
+      <Grid
+        container
+        item
+        justifyContent={"center"}
+        alignItems={"center"}
+        xs={12}
+        style={{ padding: "5px" }}
+      >
         <div
           style={{
-            height: "70vh",
-            width: "780",
-            backgroundColor: GRAPH_BG,
+            width: width,
+            height: height,
             borderRadius: "15px",
           }}
         >
           <ResponsiveSwarmPlot
-            data={shapData
-              .map((obj: any) => ({ ...obj, group: obj.name }))
-              .filter((obj: any) => Math.abs(obj.value) <= 1)}
+            data={shapData}
             groups={uniq(shapData.map((obj: any) => obj.name))}
-            size={3}
+            size={2.5}
             theme={{
-              textColor: "black",
+              textColor: "white",
               crosshair: {
                 line: {
                   stroke: "blue",
                 },
               },
             }}
-            colors={"#1f77b4"}
             value="value"
             valueFormat="$.2f"
             valueScale={{ type: "linear", min: -1, max: 1, reverse: false }}
@@ -70,11 +93,15 @@ function Shap() {
                 ["opacity", 0.5],
               ],
             }}
-            margin={{ top: 30, right: 80, bottom: 30, left: 120 }}
+            margin={{ top: 30, right: 30, bottom: 30, left: 120 }}
             layout={"horizontal"}
             axisRight={null}
             axisTop={null}
-            colorBy={"none"}
+            colorBy={"id"}
+            colors={(data: any) => {
+              console.log(data);
+              return colors[+data.id * 10];
+            }}
           />
           {/* <ScatterChart
             width={500}
@@ -106,6 +133,19 @@ function Shap() {
           </ScatterChart>
           */}
         </div>
+      </Grid>
+      <Grid item xs={12} margin={1}>
+        <div
+          style={{
+            height: "20px",
+            width: "600",
+            borderRadius: "15px",
+            backgroundImage: "linear-gradient(to right, #0080ff,#ff0000)",
+          }}
+        ></div>
+        <Typography style={{ width: "500px", textAlign: "center" }}>
+          Normalized values from 0 to 1
+        </Typography>
       </Grid>
     </Grid>
   );

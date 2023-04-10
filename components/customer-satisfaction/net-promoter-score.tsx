@@ -1,4 +1,9 @@
-import { COLORS, piechart_data, renderCustomizedLabel } from "@/constants";
+import {
+  COLORS,
+  GRAPH_BG,
+  piechart_data,
+  renderCustomizedLabel,
+} from "@/constants";
 import { Grid, Typography } from "@mui/material";
 import { Cell, Pie, PieChart, Tooltip } from "recharts";
 
@@ -16,7 +21,7 @@ export function NetPromotorScore({ data = piechart_data }) {
         width={300}
         height={250}
         style={{
-          backgroundColor: "white",
+          backgroundColor: GRAPH_BG,
           margin: "20px",
           borderRadius: "15px",
         }}

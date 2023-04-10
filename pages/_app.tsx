@@ -13,9 +13,13 @@ const darkTheme = createTheme({
     },
   },
   typography: {
+    allVariants: {
+      color: "white",
+    },
     h5: {
       fontWeight: 600,
       fontSize: "1.65rem",
+      color: "white",
     },
   },
 });
