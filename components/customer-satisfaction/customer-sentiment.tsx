@@ -1,6 +1,16 @@
 import { Grid, LinearProgress, Typography } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export function CustomerSentiment({ goodValue = 80, badValue = 40 }) {
+  const [happy, setHappy] = useState(0);
+  const [angry, setAngry] = useState(0);
+  useEffect(() => {
+    axios.get("/api/server?path=customer-reaction").then((res: any) => {
+      setHappy(+res.data.happy_count);
+      setAngry(+res.data.angry_count);
+    });
+  }, []);
   return (
     <Grid
       container
@@ -40,7 +50,7 @@ export function CustomerSentiment({ goodValue = 80, badValue = 40 }) {
             }}
           />
           <Typography style={{ fontSize: "1.5rem", marginLeft: "2" }}>
-            {goodValue}%
+            {happy?.toFixed(2)}%
           </Typography>
         </Grid>
       </Grid>
@@ -74,7 +84,7 @@ export function CustomerSentiment({ goodValue = 80, badValue = 40 }) {
             }}
           />
           <Typography style={{ fontSize: "1.5rem", marginLeft: "2" }}>
-            {badValue}%
+            {angry?.toFixed(2)}%
           </Typography>
         </Grid>
       </Grid>
